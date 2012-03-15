@@ -1,7 +1,7 @@
 package org.apache.hadoop.examples;
 
 import java.io.IOException;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class WordCount {
+public class WordCountMR {
 
   public static class TokenizerMapper 
        extends Mapper<Object, Text, Text, IntWritable>{
@@ -49,6 +49,7 @@ public class WordCount {
   }
 
   public static void main(String[] args) throws Exception {
+      Date start = new Date();
     Configuration conf = new Configuration();
     String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
     if (otherArgs.length != 2) {
@@ -56,7 +57,7 @@ public class WordCount {
       System.exit(2);
     }
     Job job = new Job(conf, "word count");
-    job.setJarByClass(WordCount.class);
+    job.setJarByClass(WordCountMR.class);
     job.setMapperClass(TokenizerMapper.class);
     job.setCombinerClass(IntSumReducer.class);
     job.setReducerClass(IntSumReducer.class);
@@ -64,6 +65,8 @@ public class WordCount {
     job.setOutputValueClass(IntWritable.class);
     FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
     FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
-    System.exit(job.waitForCompletion(true) ? 0 : 1);
+    boolean code = job.waitForCompletion(true);
+    System.out.println((new Date()).getTime()-start.getTime() + " total milliseconds");
+    System.exit( code ? 0 : 1);
   }
 }
