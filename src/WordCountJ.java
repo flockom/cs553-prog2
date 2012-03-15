@@ -94,7 +94,8 @@ class Worker extends Thread{
 	//grab a file to work on
 	String cf;
 	while( (cf = files.poll()) != null){
-	    try(BufferedReader input = new BufferedReader(new FileReader(cf))){
+	    try{
+		BufferedReader input = new BufferedReader(new FileReader(cf));
 		String text;
 		//well go line-by-line... maybe this is not the fastest
 		while((text=input.readLine()) != null){
@@ -109,6 +110,7 @@ class Worker extends Thread{
 			}			    
 		    }
 		}
+		input.close();
 	    }catch (Exception e) {
 		System.out.println(" caught a " + e.getClass() +
 				   "\n with message: " + e.getMessage());
