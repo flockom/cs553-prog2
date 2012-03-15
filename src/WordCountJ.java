@@ -63,7 +63,7 @@ public class WordCountJ{
 	    PrintStream out = 
 		new PrintStream(outfile);
 	    for(int i=0;i<sorted_results.size();i++){
-	      out.println(sorted_results.get(i).getKey()+ "   " + sorted_results.get(i).getValue());
+	      out.println(sorted_results.get(i).getKey()+ "\t" + sorted_results.get(i).getValue());
 	  }
 	}catch(Exception e){System.out.println("Caught Exception: " + e.getMessage());}
     }

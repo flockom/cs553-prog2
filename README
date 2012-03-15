@@ -1,0 +1,46 @@
+The Makefile included will compile the programs and run the plain java
+version, since your cluster setup may varry it will only compile the
+MapReduce version.
+
+First open the Makefile and edit the variables based on your Hadoop configuration and the location of your input files
+
+Compile the plain java wordcount application using:
+
+$ make WordCountJ
+
+Run it using:
+
+$ make plain N=1 OUT=out1.txt
+4951 total milliseconds
+6928 unique words
+
+This will run with one thread and put the results in ./output/out1.txt
+
+
+To compile the MapReduce version:
+
+$ make WordCountMR
+
+To run the MapReduce version, assuming you have a working Hadoop cluster and all nodes are up and running:
+
+1. create your hdfs if it is not already created ex:
+$ /opt/hadoop/bin/hadoop namenode -format
+
+2. start Hadoop:
+$ /opt/hadoop/bin/start-all.sh
+
+3. add the input files to hdfs
+$ /opt/hadoop/bin/hadoop fs -put ./input/WC_input input
+assuming ./input/WC_input contains the files to wordcount
+
+4. run wordcount
+$ /opt/hadoop/bin/hadoop jar bin/WordCountMR.jar org.apache.hadoop.examples.WordCountMR input output
+
+5. the total execution time will be printed just before the program finishes
+
+6. move the output back to the host file system
+$ /opt/hadoop/bin/hadoop fs -get output output/outputMR
+
+7. verify the output matches the plain java run
+$ diff output/out1.txt output/outputMR/part-r-00000
+you should see no difference.
