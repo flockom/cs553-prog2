@@ -44,3 +44,13 @@ $ /opt/hadoop/bin/hadoop fs -get output output/outputMR
 7. verify the output matches the plain java run
 $ diff output/out1.txt output/outputMR/part-r-00000
 you should see no difference.
+
+
+To get average execution time use the 'averager.sh' script. It works
+with both versions i.e. to average 10 runs of the plaint Java version run:
+
+$ ./averager 'make plain N=1 OUT=out1.txt' 10
+
+To get the average for 10 Hadoop runs :
+
+$ ./averager '/opt/hadoop/bin/hadoop jar bin/WordCountMR.jar org.apache.hadoop.examples.WordCountMR input output;/opt/hadoop/bin/hadoop fs -rmr output' 10
